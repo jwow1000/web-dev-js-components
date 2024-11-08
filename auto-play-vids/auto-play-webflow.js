@@ -1,3 +1,7 @@
+// *** things i learned
+// for mobile the video tag needs playsinline flag
+// <video loop="true" playsinline>
+
 
 Webflow.push( function() {
 	const movies = document.querySelectorAll(".video-loop");
