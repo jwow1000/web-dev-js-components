@@ -41,35 +41,32 @@ function steadyCount(elem, start, end, duration) {
   requestAnimationFrame(update);
 }
 
-// Define number targets, this is some squarespace stuff
-const ids = [
-  { id: "#block-4c4528f82b751a1cd7fe", target: 5406, time: 3000 },
-  { id: "#block-7a970e36fa7c8ccd3600", target: 158652, time: 3000 },
-  { id: "#block-84f26f96c626af5e09fb", target: 2199, time: 3000 },
-  { id: "#block-1d9be73e0963665547af", target: 114, time: 6000 },
-];
-
 // Initialize animations
-window.addEventListener("load", function() {
-  ids.forEach(item => {
-    const numberElement = document.querySelector(`${item.id} .sqsrte-text-color--custom`);
-    if (numberElement) {
-      numberElement.dataset.target = item.target;
-      numberElement.innerText = "0";
-      numberElement.style.textAlign = "center";
-      
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && numberElement.dataset.animating !== 'true') {
-            steadyCount(numberElement, 0, item.target, item.time);
-            observer.unobserve(numberElement);
-          }
-        });
-      }, {
-        threshold: 0.1
+// make sure script runs only once
+let hasRun = false;
+  
+window.addEventListener("load", function () {
+  if (hasRun) return;
+  hasRun = true;
+  // select the number elements
+  const items = document.querySelectorAll('.homePage-countUp');
+  
+  items.forEach(item => {
+    const time = item.getAttribute('data-time');
+    const target = item.getAttribute('data-target');
+    console.log("check values", item, time, target);
+    // Intersection observer for animation
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && numberElement.dataset.animating !== 'true') {
+          steadyCount(numberElement, 0, target, time); // Start the animation
+          observer.unobserve(numberElement); // Stop observing once animated
+        }
       });
-      
-      observer.observe(numberElement);
-    }
+    }, {
+      threshold: 0.1
+    });
+
+    observer.observe(numberElement);
   });
 });
